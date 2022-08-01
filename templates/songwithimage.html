@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+{% block title %}SUCCESS{% endblock %}
+{% block content %}
+<div class="image-container">
+  <div class="text1">SUCCESS!</div>
+</div>
+
+<div class="container-sm pb-3">
+	<div id="block_cont">
+		<div>
+			<p>
+				<h1>The song was added successfully!</h1>
+			</p>
+			<h2>Preview:</h2>
+			<div style="margin: 10px auto;">
+				<video controls="controls" preload="preload">
+					<source src="{{ url_for('display_video', filename=file, username=username) }}" type="video/mp4"></source>
+				</video>
+			</div>
+		</div>
+		<div style="margin-left: auto; margin-right: 0;">
+			<img class="img-fluid" style="width: 300px; height: auto;" src="/static/bg.png" />
+		</div>
+	</div>
+</div>
+{% endblock %}

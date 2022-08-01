@@ -1,0 +1,74 @@
+{% extends 'layout.html' %}
+{% block title %}Detected Mood{% endblock %}
+{% block content %}
+<div class="image-container">
+  <div class="text1">DETECTED MOOD</div>
+</div>
+
+<div class="container-sm pb-3">
+    <div id="block_cont">
+        <div>
+            <p>
+                <h1>Detected Mood: {{ emotion }} <img src="{{url_for('send_emoji', emotion=emotion)}}"></h1>
+            </p>
+            <div style="margin: 0 0 10px 0;" class="classified">
+                {% if type == "image" %}
+                <img id="file-ip-1-classified" src="{{url_for('send_image', filename=filename, username=username)}}">
+                {% else %}
+                <video controls="controls" preload="preload">
+                    <source src="{{ url_for('display_video', filename=filename, username=username) }}" type="video/mp4"></source>
+		        </video>
+                {% endif %}
+            </div>
+            <h4>Not the correct emotion?</h4>
+            <form name="myForm" action="" method="POST" onsubmit="">
+                <div style="display: flex; justify-content: left;margin-bottom: 8px;">
+                    <select name="emotion" class="custom-select" style="width:250px;">
+                        <option selected>Choose emotion</option>
+                        <option value="Happy">Happy</option>
+                        <option value="Sad">Sad</option>
+                        <option value="Angry">Angry</option>
+                        <option value="Fear">Fear</option>
+                        <option value="Surprise">Surprise</option>
+                        <option value="Disgust">Disgust</option>
+                        <option value="Neutral">Neutral</option>
+                    </select>
+                    <div style="margin-left: 5px;"><input type="submit" value="Change emotion" name="submit_button" class="btn btn-outline-secondary" id="btn"></div>
+                    <div class='spinner-displayer'></div>
+                </div>
+            </form>
+            <p>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+                </ul>
+                {% endif %}
+                {% endwith %}
+            </p>
+        </div>
+        <div style="margin-left: auto; margin-right: 0;">
+            <img class="img-fluid" style="width: 300px; height: auto;" src="/static/bg.png" />
+        </div>
+    </div>
+    <div id="block_container">
+        <div><a href="{{ url_for('get_gallery') }}" class="btn btn-info">Upload without a song</a></div>
+        <div style="margin-left: auto; margin-right: 0;"><a href="{{url_for('chooseasong', emotion=emotion, type=type)}}" class="btn btn-info">Choose a song</a></div>
+        <div class='spinner-displayer'></div>
+    </div>
+</div>
+
+<script>
+function spinner() {
+    const spinnerDisplayer = document.querySelector('.spinner-displayer');
+    const btn = document.getElementById('btn');
+    btn.addEventListener('click', () => {
+    spinnerDisplayer.classList.add('loading');
+  })
+}
+
+spinner();
+</script>
+{% endblock %}

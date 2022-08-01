@@ -1,0 +1,73 @@
+{% extends 'layout.html' %}
+{% block title %}Gallery{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.css" integrity="sha512-Woz+DqWYJ51bpVk5Fv0yES/edIMXjj3Ynda+KWTIkGoynAMHrqTcDUQltbipuiaD5ymEo9520lyoVOo9jCQOCA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<div class="image-container">
+  <div class="text1">GALLERY</div>
+</div>
+
+<div class="container-sm pb-3">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#images">Images</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#videos">Videos</a>
+        </li>
+    </ul>
+    {% if image_names|length or video_names|length %}
+        <div style="margin: 10px 0 0 10px;"><button class="button-55" onclick="showDiv()">Edit</button></div>
+    {% endif %}
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div class="tab-pane container active" id="images">
+            <div class="gallery" id="photos">
+                {% if image_names|length %}
+                {% for image_name in image_names %}
+                <span>
+                    <a href="{{url_for('send_image', filename=image_name, username=username)}}" data-lightbox="mygallery">
+                        <img src="{{url_for('send_image', filename=image_name, username=username)}}">
+                    </a>
+                    <div class="btn-group">
+                        <a href="{{url_for('delete_file', username=username, filename=image_name, filetype='image')}}" style="display: none;" class="btn btn-danger">Delete</a>
+                    </div>
+                    <div class="btn-group">
+                        <a href="{{url_for('downloadFile', username=username, filename=image_name, filetype='image')}}" style="display: none;" class="btn btn-primary">Save</a>
+                    </div>
+                </span>
+                {% endfor %}
+                {% else %}
+                <h2>The images gallery is empty.</h2>
+                {% endif %}
+            </div>
+        </div>
+        <div class="tab-pane container fade" id="videos">
+            <div class="gallery" id="clips">
+                {% if video_names|length %}
+                {% for video_name in video_names %}
+                <span>
+                    <video style="max-height: 250px; width: auto;" controls="controls" preload="preload">
+                        <source src="{{ url_for('display_video', filename=video_name, username=username) }}" type="video/mp4"></source>
+                    </video>
+                    <div class="btn-group">
+                        <a href="{{url_for('delete_file', username=username, filename=video_name, filetype='video')}}" style="display: none;" class="btn btn-danger">Delete</a>
+                    </div>
+                    <div class="btn-group">
+                        <a href="{{url_for('downloadFile', username=username, filename=video_name, filetype='video')}}" style="display: none;" class="btn btn-primary">Save</a>
+                    </div>
+                </span>
+                {% endfor %}
+                {% else %}
+                <h2>The videos gallery is empty.</h2>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox-plus-jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="static/js/gallery.js"></script>
+{% endblock %}

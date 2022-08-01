@@ -1,0 +1,325 @@
+{% extends 'layout.html' %}
+{% block title %}Emojis{% endblock %}
+{% block content %}
+<div class="image-container">
+	<div class="text1">EMOJIS</div>
+</div>
+<div class="container-sm pb-3">
+	<div id="block_cont">
+		<div>
+			<h2>Select an emoji to upload</h2>
+			{% with messages = get_flashed_messages() %}
+			{% if messages %}
+			<ul>
+				{% for message in messages %}
+				<li>{{ message }}</li>
+				{% endfor %}
+			</ul>
+			{% endif %}
+			{% endwith %}
+			<div id="preview" style="display: none;">
+				<img id="file-ip-1-preview">
+			</div>
+			<form id="loginForm" method="post" action="/emojis" onsubmit="this.submit_button.disabled = true;" enctype="multipart/form-data">
+				<div>
+					<select name="emotion" class="custom-select" style="margin: 5px 0;width:300px;">
+						<option selected>Emotion</option>
+						<option value="Happy">Happy</option>
+						<option value="Sad">Sad</option>
+						<option value="Angry">Angry</option>
+						<option value="Fear">Fear</option>
+						<option value="Surprise">Surprise</option>
+						<option value="Disgust">Disgust</option>
+						<option value="Neutral">Neutral</option>
+					</select>
+				</div>
+				<label class="file">
+				<input type="file" name="file" id="file" onchange="showPreview(event);" autocomplete="off" required>
+				<span class="file-custom"></span>
+				</label>
+				<div class="toggle-container">
+					<span>Set as default</span>
+					<input type="checkbox" name="toggle" id="set_def" class="toggle">
+					<label for="set_def" class="label">
+						<div class="ball"></div>
+					</label>
+				</div>
+				<div id="block_container">
+					<div><input type="submit" value="Upload emoji" name="submit_button" class="btn btn-info" id="btn" disabled="true"></div>
+					<div class='spinner-displayer'></div>
+				</div>
+			</form>
+			<div class="shadow p-4 mb-4 bg-white" style="margin-top: 8px;">
+				<div style="display: flex; justify-content: left;">
+					<div>
+						<h3>Your emojis:</h3>
+					</div>
+					{% if emoji_names|length %}
+					<div style="margin: 0 0 0 auto;"><button class="button-55" onclick="showDiv()">Edit</button></div>
+					{% endif %}
+				</div>
+				<div class="gallery" id="emojis">
+					{% if emoji_names|length %}
+					{% for emoji in emoji_names %}
+					<span>
+						<img style="max-width: 70px; height: auto;" src="{{url_for('send_user_emoji', filename=emoji)}}">
+						<span class="buttons" style="display: none;">
+							<div class="btn-group">
+								<a href="{{url_for('delete_emoji', filename=emoji)}}" class="btn btn-danger">Delete</a>
+							</div>
+							<div class="btn-group">
+								<a href="{{url_for('download_emoji', filename=emoji)}}" class="btn btn-primary">Save</a>
+							</div>
+						</span>
+					</span>
+					{% endfor %}
+					{% else %}
+					<h4>Your emojis gallery is empty.</h4>
+					{% endif %}
+				</div>
+			</div>
+			<h2>Choose default emoji:</h2>
+			<!-- Nav tabs -->
+			<ul class="nav nav-tabs">
+				<li class="nav-item">
+					<a class="nav-link active" data-toggle="tab" href="#happy">Happy</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" data-toggle="tab" href="#sad">Sad</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" data-toggle="tab" href="#angry">Angry</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" data-toggle="tab" href="#fear">Fear</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" data-toggle="tab" href="#surprise">Surprise</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" data-toggle="tab" href="#disgust">Disgust</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" data-toggle="tab" href="#neutral">Neutral</a>
+				</li>
+			</ul>
+			<!-- Tab panes -->
+			<div class="tab-content">
+				<div class="tab-pane container active" id="happy">
+					<div class="gallery">
+						<h3>Default happy emoji:
+							{% if default_list[0] == "null" %}
+							<img class="Happy" style="max-width: 70px; height: auto;" src="{{url_for('send_emoji', emotion='happy')}}" />
+							{% else %}
+							<img class="Happy" style="max-width: 70px; height: auto;" src="{{url_for('send_user_emoji', filename=default_list[0])}}">
+							{% endif %}
+						</h3>
+						<span>
+						{% for item0 in happy %}
+						<img id="{{item0}}" onclick="mark(this, 'Happy')" style="cursor: pointer;max-width: 70px; height: auto;" src="{{url_for('send_user_emoji', filename=item0)}}">
+						{% endfor %}
+						</span>
+					</div>
+					<a onclick="restore('Happy')" href="{{url_for('restore_default', emotion='Happy')}}" class="btn btn-secondary btn-lg btn-block">Restore default emoji</a>
+				</div>
+				<div class="tab-pane container fade" id="sad">
+					<div class="gallery">
+						<h3>Default sad emoji:
+							{% if default_list[1] == "null" %}
+							<img class="Sad" style="max-width: 70px; height: auto;" src="{{url_for('send_emoji', emotion='sad')}}" />
+							{% else %}
+							<img class="Sad" style="max-width: 70px; height: auto;" src="{{url_for('send_user_emoji', filename=default_list[1])}}">
+							{% endif %}
+						</h3>
+						<span>
+						{% for item1 in sad %}
+						<img id="{{item1}}" onclick="mark(this, 'Sad')" style="cursor: pointer;max-width: 70px; height: auto;" src="{{url_for('send_user_emoji', filename=item1)}}">
+						{% endfor %}
+						</span>
+					</div>
+					<a onclick="restore('Sad')" href="{{url_for('restore_default', emotion='Sad')}}" class="btn btn-secondary btn-lg btn-block">Restore default emoji</a>
+				</div>
+				<div class="tab-pane container fade" id="angry">
+					<div class="gallery">
+						<h3>Default angry emoji:
+							{% if default_list[2] == "null" %}
+							<img class="Angry" style="max-width: 70px; height: auto;" src="{{url_for('send_emoji', emotion='angry')}}" />
+							{% else %}
+							<img class="Angry" style="max-width: 70px; height: auto;" src="{{url_for('send_user_emoji', filename=default_list[2])}}">
+							{% endif %}
+						</h3>
+						<span>
+						{% for item2 in angry %}
+						<img id="{{item2}}" onclick="mark(this, 'Angry')" style="cursor: pointer;max-width: 70px; height: auto;" src="{{url_for('send_user_emoji', filename=item2)}}">
+						{% endfor %}
+						</span>
+					</div>
+					<a onclick="restore('Angry')" href="{{url_for('restore_default', emotion='Angry')}}" class="btn btn-secondary btn-lg btn-block">Restore default emoji</a>
+				</div>
+				<div class="tab-pane container fade" id="fear">
+					<div class="gallery">
+						<h3>Default fear emoji:
+							{% if default_list[3] == "null" %}
+							<img class="Fear" style="max-width: 70px; height: auto;" src="{{url_for('send_emoji', emotion='fear')}}" />
+							{% else %}
+							<img class="Fear" style="max-width: 70px; height: auto;" src="{{url_for('send_user_emoji', filename=default_list[3])}}">
+							{% endif %}
+						</h3>
+						<span>
+						{% for item3 in fear %}
+						<img id="{{item3}}" onclick="mark(this, 'Fear')" style="cursor: pointer;max-width: 70px; height: auto;" src="{{url_for('send_user_emoji', filename=item3)}}">
+						{% endfor %}
+						</span>
+					</div>
+					<a onclick="restore('Fear')" href="{{url_for('restore_default', emotion='Fear')}}" class="btn btn-secondary btn-lg btn-block">Restore default emoji</a>
+				</div>
+				<div class="tab-pane container fade" id="surprise">
+					<div class="gallery">
+						<h3>Default surprise emoji:
+							{% if default_list[4] == "null" %}
+							<img class="Surprise" style="max-width: 70px; height: auto;" src="{{url_for('send_emoji', emotion='surprise')}}" />
+							{% else %}
+							<img class="Surprise" style="max-width: 70px; height: auto;" src="{{url_for('send_user_emoji', filename=default_list[4])}}">
+							{% endif %}
+						</h3>
+						<span>
+						{% for item4 in surprise %}
+						<img id="{{item4}}" onclick="mark(this, 'Surprise')" style="cursor: pointer;max-width: 70px; height: auto;" src="{{url_for('send_user_emoji', filename=item4)}}">
+						{% endfor %}
+						</span>
+					</div>
+					<a onclick="restore('Surprise')" href="{{url_for('restore_default', emotion='Surprise')}}" class="btn btn-secondary btn-lg btn-block">Restore default emoji</a>
+				</div>
+				<div class="tab-pane container fade" id="disgust">
+					<div class="gallery">
+						<h3>Default disgust emoji:
+							{% if default_list[5] == "null" %}
+							<img class="Disgust" style="max-width: 70px; height: auto;" src="{{url_for('send_emoji', emotion='disgust')}}" />
+							{% else %}
+							<img class="Disgust" style="max-width: 70px; height: auto;" src="{{url_for('send_user_emoji', filename=default_list[5])}}">
+							{% endif %}
+						</h3>
+						<span>
+						{% for item5 in disgust %}
+						<img id="{{item5}}" onclick="mark(this, 'Disgust')" style="cursor: pointer;max-width: 70px; height: auto;" src="{{url_for('send_user_emoji', filename=item5)}}">
+						{% endfor %}
+						</span>
+					</div>
+					<a onclick="restore('Disgust')" href="{{url_for('restore_default', emotion='Disgust')}}" class="btn btn-secondary btn-lg btn-block">Restore default emoji</a>
+				</div>
+				<div class="tab-pane container fade" id="neutral">
+					<div class="gallery">
+						<h3>Default neutral emoji:
+							{% if default_list[6] == "null" %}
+							<img class="Neutral" style="max-width: 70px; height: auto;" src="{{url_for('send_emoji', emotion='neutral')}}" />
+							{% else %}
+							<img class="Neutral" style="max-width: 70px; height: auto;" src="{{url_for('send_user_emoji', filename=default_list[6])}}">
+							{% endif %}
+						</h3>
+						<span>
+						{% for item6 in neutral %}
+						<img id="{{item6}}" onclick="mark(this, 'Neutral')" style="cursor: pointer;max-width: 70px; height: auto;" src="{{url_for('send_user_emoji', filename=item6)}}">
+						{% endfor %}
+						</span>
+					</div>
+					<a onclick="restore('Neutral')" href="{{url_for('restore_default', emotion='Neutral')}}" class="btn btn-secondary btn-lg btn-block">Restore default emoji</a>
+				</div>
+			</div>
+			<div style="margin-top: 8px;" class="container"><a id="setbutton" href="" onclick="set()" class="btn btn-primary btn-lg btn-block">Set as default</a></div>
+		</div>
+		<div style="margin-left: auto; margin-right: 0;">
+			<img class="img-fluid" style="width: 300px; height: auto;" src="static/bg.png" />
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+    var element = document.getElementById('emojis');
+    element.addEventListener('click', (event) => {
+        if (event.target.className === 'btn btn-danger') {
+            const button = event.target;
+            const a = button.parentNode;
+            const aparent = a.parentNode
+            const apparent = aparent.parentNode
+            const div = apparent.parentNode;
+            if (button.textContent === 'Delete') {
+                div.removeChild(apparent);
+            }
+        }
+    });
+
+    function showDiv() {
+        var x = document.querySelectorAll(".buttons");
+        x.forEach(item => {
+            if (item.style.display == 'block')
+                item.style.display = 'none';
+            else
+                item.style.display = 'block';
+        });
+    }
+
+  function showPreview(event){
+  if(event.target.files.length > 0){
+    var src = URL.createObjectURL(event.target.files[0]);
+    var previewDiv = document.getElementById("preview");
+    previewDiv.style.display = "block";
+    var preview = document.getElementById("file-ip-1-preview");
+    preview.src = src;
+    preview.style.display = "block";
+    var e = document.getElementById("btn");
+    e.removeAttribute("disabled");
+  }
+}
+
+function spinner() {
+    const spinnerDisplayer = document.querySelector('.spinner-displayer');
+    const btn = document.getElementById('btn');
+    btn.addEventListener('click', () => {
+    spinnerDisplayer.classList.add('loading');
+  })
+}
+
+spinner();
+
+
+
+
+// set an empty variable to compare later
+var previousEl;
+var marked;
+var selectedEmotion;
+function mark(currentEl, emotion) {
+    // Retrieves the id of current element that is clicked
+    var id = currentEl.id;
+
+    /**
+    * Checks to see if a previous element has been clicked
+    * if it was, it will remove the border from the previous and apply it to the current element
+    */
+    if(previousEl){
+        previousEl.style.border = "unset"; // css unset border
+        currentEl.style.border = "3px solid red"; // apply border to current element
+        previousEl = document.getElementById(id); // assign current element id to previousEl variable
+        marked = currentEl.id;
+        selectedEmotion=emotion
+    } else {
+        currentEl.style.border = "3px solid red";
+        previousEl = document.getElementById(id);
+        marked = currentEl.id;
+        selectedEmotion=emotion
+    }
+}
+
+function set() {
+    var test = document.getElementById('setbutton')
+    test.href = "{{url_for('set_default_emoji', emotion='mood', filename='mark')}}".replace('mark', marked).replace('mood', selectedEmotion);
+    var file = "{{url_for('send_user_emoji', filename='mark')}}".replace('mark', marked)
+    jQuery('.' + selectedEmotion).attr('src', file);
+}
+
+function restore(emotion) {
+    var file = "{{url_for('send_emoji', emotion='default')}}".replace('default', emotion)
+    jQuery('.' + emotion).attr('src', file);
+}
+</script>
+{% endblock %}

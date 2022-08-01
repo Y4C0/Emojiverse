@@ -1,0 +1,38 @@
+{% extends 'layout.html' %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+
+<div class="image-container">
+  <div class="text1">PROFILE</div>
+</div>
+
+<div class="container-sm pb-3">
+    <p>
+        <h3>Account details:</h3>
+    </p>
+    <div id="block_cont">
+        <div style="width: 90%;margin-top: 1rem;">
+            <table>
+                <tr>
+                    <th style="text-align: center;">Name</th>
+                    <th style="text-align: center;">Username</th>
+                    <th style="text-align: center;">Email</th>
+                    <th style="text-align: center;">Images</th>
+                    <th style="text-align: center;">Videos</th>
+                </tr>
+                <tr>
+                    <td style="background-color: #FFF">{{ account['fullname'] }}</td>
+                    <td style="background-color: #FFF">{{ account['username'] }}</td>
+                    <td style="background-color: #FFF">{{ account['email'] }}</td>
+                    <td style="background-color: #FFF">{{ images }}</td>
+                    <td style="background-color: #FFF">{{ videos }}</td>
+                </tr>
+            </table>
+            <img class="img-fluid" style="margin-left: 2.5rem;width: 650px; height: auto;" src="static/emoji_set.jpg" />
+        </div>
+        <div style="margin-left: auto; margin-right: 0;">
+            <img class="img-fluid" style="width: 300px; height: auto;" src="static/bg.png" />
+        </div>
+    </div>
+</div>
+{% endblock %}

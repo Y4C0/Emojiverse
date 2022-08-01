@@ -1,0 +1,74 @@
+{% extends 'layout.html' %}
+{% block title %}Choose a song{% endblock %}
+{% block content %}
+<div class="image-container">
+  <div class="text1">CHOOSE A SONG</div>
+</div>
+
+<div class="container-sm pb-3">
+    <form name="myForm" action="" method="post" onsubmit="">
+        <table style="margin-bottom: 10px;">
+            <tr>
+                <th style="text-align: center;">Song name</th>
+                <th style="text-align: center;">Artist</th>
+                <th style="text-align: center;">Play</th>
+                <th style="text-align: center;">Pick</th>
+            </tr>
+            {% for song_name,artist,song in songs %}
+                <tr>
+                    <td>
+                        {{song_name}}
+                    </td>
+                    <td>
+                        {{artist}}
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="{{url_for('song_mp3', emotion=emotion, song=song)}}">
+                        </audio>
+                    </td>
+                    <td>
+                        <input type="radio" name="options" value="{{song}}" checked>
+                    </td>
+                </tr>
+            {% endfor %}
+            {% for username,song_name,artist,song,emotion in song_list %}
+                <tr>
+                    <td>
+                        {{song_name}}
+                    </td>
+                    <td>
+                        {{artist}}
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="{{url_for('user_song', filename=song)}}">
+                        </audio>
+                    </td>
+                    <td>
+                        <input type="radio" name="options" value="{{song}}" checked>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <div id="block_container">
+            <div><a href="{{ url_for('get_gallery') }}" class="btn btn-info">Upload without a song</a></div>
+            <div style="margin-left: auto; margin-right: 0;">
+                <input type="submit" value="Upload" name="submit_button" class="btn btn-info" id="btn">
+            </div>
+            <div class='spinner-displayer'></div>
+        </div>
+    </form>
+</div>
+<script>
+function spinner() {
+    const spinnerDisplayer = document.querySelector('.spinner-displayer');
+    const btn = document.getElementById('btn');
+    btn.addEventListener('click', () => {
+    spinnerDisplayer.classList.add('loading');
+    })
+}
+
+spinner();
+</script>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+<div class="image-container">
+  <div class="text1">HOME</div>
+</div>
+
+<div class="container-sm pb-3">
+    <div id="block_cont">
+        <div>
+            <p>Welcome {{ username }}!<br>You have {{ total }} items in the gallery ({{ images }} images and {{ videos }} videos).</p>
+            <div class="shadow p-4 mb-4 bg-white">
+                The system can detect seven different emotions:
+                <div class="container" id="hometable">
+                    <div class="row">
+                        <div class="col-sm"><b>Happy</b></div>
+                        <div class="col-sm"><b>Sad</b></div>
+                        <div class="col-sm"><b>Angry</b></div>
+                        <div class="col-sm"><b>Fear</b></div>
+                        <div class="col-sm"><b>Surprise</b></div>
+                        <div class="col-sm"><b>Disgust</b></div>
+                        <div class="col-sm"><b>Neutral</b></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm"><img src="{{url_for('send_emoji', emotion='happy')}}"></div>
+                        <div class="col-sm"><img src="{{url_for('send_emoji', emotion='sad')}}"></div>
+                        <div class="col-sm"><img src="{{url_for('send_emoji', emotion='angry')}}"></div>
+                        <div class="col-sm"><img src="{{url_for('send_emoji', emotion='fear')}}"></div>
+                        <div class="col-sm"><img src="{{url_for('send_emoji', emotion='surprise')}}"></div>
+                        <div class="col-sm"><img src="{{url_for('send_emoji', emotion='disgust')}}"></div>
+                        <div class="col-sm"><img src="{{url_for('send_emoji', emotion='neutral')}}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="margin-left: auto; margin-right: 0;">
+            <img class="img-fluid" style="width: 300px; height: auto;" src="static/bg.png" />
+        </div>
+    </div>
+</div>
+{% endblock %}

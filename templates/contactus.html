@@ -1,0 +1,57 @@
+{% extends 'layout.html' %}
+{% block title %}Contact us{% endblock %}
+{% block content %}
+
+<div class="image-container">
+  <div class="text1">CONTACT</div>
+</div>
+
+<div class="container-sm pb-3">
+    <div id="block_cont">
+        <div style="width: 50%;">
+            <div class="contact">
+                <form action="{{ url_for('get_contact') }}" method=post>
+                    <div>
+                        <p>
+                            <span>Name:</span>
+                            <span>{{ name }}</span>
+                        </p>
+                        <p>
+                            <span>Email:</span>
+                            <span>{{ email }}</span>
+                        </p>
+                        <!-- Subject of your request -->
+                        <p>
+                            {{ form.subject.label }}
+                            {{form.subject(placeholder='Your subject ...')}}
+                        </p>
+                        <!-- Content of your request -->
+                        <p>
+                            {{ form.message.label }}
+                            {{ form.message(placeholder='write your request ...') }}
+                        </p>
+                        <!-- Submit button -->
+                        <p>
+                            {{ form.submit }}
+                        </p>
+                        <p>
+                            {% with messages = get_flashed_messages() %}
+                                {% if messages %}
+                                <ul>
+                                    {% for message in messages %}
+                                        <li>{{ message }}</li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                            {% endwith %}
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div style="margin-left: auto; margin-right: 0;">
+            <img class="img-fluid" style="width: 300px; height: auto;" src="static/bg.png" />
+        </div>
+    </div>
+</div>
+{% endblock %}
