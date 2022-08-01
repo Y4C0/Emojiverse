@@ -20,13 +20,10 @@ from flask import send_file
 import uuid  # for unique filenames
 
 UPLOAD_FOLDER = 'CNNmodel/images/'
-def create_app():
-    app = Flask(__name__)
-    app.secret_key = 'cairocoders-ednalan'
-    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-    app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
-    return app
-
+app = Flask(__name__)
+app.secret_key = 'cairocoders-ednalan'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 DB_HOST = "localhost"
 DB_NAME = "postgres"
