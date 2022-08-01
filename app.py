@@ -20,15 +20,16 @@ from flask import send_file
 import uuid  # for unique filenames
 
 UPLOAD_FOLDER = 'CNNmodel/images/'
-app = Flask(__name__)
-app.secret_key = 'cairocoders-ednalan'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
-APP_ROOT = os.path.dirname(os.path.abspath(__file__))
-DB_HOST = "localhost"
-DB_NAME = "postgres"
-DB_USER = "postgres"
-DB_PASS = "123456"
+def create_app():
+    app = Flask(__name__)
+    app.secret_key = 'cairocoders-ednalan'
+    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+    app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+    APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+    DB_HOST = "localhost"
+    DB_NAME = "postgres"
+    DB_USER = "postgres"
+    DB_PASS = "123456"
 
 conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST)
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'mp4'])
